@@ -271,7 +271,7 @@ body {
     font-size: 0.85em;
 }
 
-.status.active {
+.status.active, .status.taken {
     background: rgba(0, 255, 136, 0.2);
     color: var(--accent-primary);
 }
@@ -279,6 +279,16 @@ body {
 .status.inactive {
     background: rgba(255, 68, 68, 0.2);
     color: var(--danger);
+}
+
+.status.hosted {
+    background: rgba(0, 255, 200, 0.2);
+    color: #00ffcc;
+}
+
+.status.pending {
+    background: rgba(255, 170, 0, 0.2);
+    color: var(--warning);
 }
 
 /* Features Grid */
