@@ -1,0 +1,11 @@
+oni (1.0.0-1) noble; urgency=medium
+
+  * Initial release of ONI - Orbital Network Infrastructure
+  * Two desktop apps: ONI Manager and Orbit Browser
+  * Auto-starts P2P nodes when browser opens
+  * Uses Supabase cloud backbone for universal access
+  * Free .orb domain registration and hosting
+  * Docker self-hosting support
+  * ONI DevKit developer documentation
+
+ -- Technic_ Dev <bitaofficialaccount@users.noreply.github.com>  Thu, 04 Jun 2026 20:00:00 +0200

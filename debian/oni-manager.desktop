@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=ONI Manager
+Comment=Manage your ONI network nodes and domains
+Exec=python3 /usr/share/oni/apps/oni_manager.py
+Icon=/usr/share/oni/apps/oni-manager-icon.png
+Terminal=false
+Type=Application
+Categories=Network;Utility;
+Keywords=oni;orbit;network;p2p;decentralized;
+StartupWMClass=ONIManager

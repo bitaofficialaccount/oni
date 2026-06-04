@@ -1,0 +1,23 @@
+Source: oni
+Section: net
+Priority: optional
+Maintainer: Technic_ Dev <bitaofficialaccount@users.noreply.github.com>
+Build-Depends: debhelper (>= 10), dh-python, python3-all, python3-setuptools
+Standards-Version: 4.1.2
+Homepage: https://github.com/bitaofficialaccount/oni
+
+Package: oni
+Architecture: all
+Depends: ${python3:Depends}, ${misc:Depends}, python3 (>= 3.8), python3-tk, python3-websockets, python3-flask, python3-requests, python3-aiohttp
+Description: Orbital Network Infrastructure - Decentralized Web
+ ONI is a peer-to-peer internet network that replaces traditional web
+ infrastructure with a fully decentralized alternative. Includes:
+ .
+ - ONI Manager: Desktop GUI for managing nodes, domains, and hosting
+ - Orbit Browser: Desktop browser for the orb:// protocol and .orb domains
+ - ONI P2P Node: Peer-to-peer networking layer
+ - ONS Server: Decentralized DNS for .orb domain resolution
+ - Domain Registrar: Free .orb domain registration
+ - Docker support: Self-hosting via docker-compose
+ .
+ The People's Internet - Decentralized, Free, Open Source.

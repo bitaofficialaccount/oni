@@ -1,0 +1,38 @@
+#!/bin/bash
+set -e
+
+# Install ONI to /usr/share/oni
+if [ ! -d /usr/share/oni ]; then
+    mkdir -p /usr/share/oni
+fi
+
+# Create the oni CLI command
+cat > /usr/bin/oni << 'CLI'
+#!/bin/bash
+ONI_DIR="/usr/share/oni"
+PYTHON=$(command -v python3 || command -v python)
+case "$1" in
+    start)       shift; $PYTHON "$ONI_DIR/start_oni.py" "$@" ;;
+    node)        shift; $PYTHON "$ONI_DIR/p2p/oni_node.py" "$@" ;;
+    ons)         shift; $PYTHON "$ONI_DIR/ons/ons_server.py" "$@" ;;
+    registrar)   shift; $PYTHON "$ONI_DIR/orbit-registrar/registrar.py" "$@" ;;
+    browser)     shift; $PYTHON "$ONI_DIR/apps/orbit_browser_app.py" "$@" ;;
+    manager)     shift; $PYTHON "$ONI_DIR/apps/oni_manager.py" "$@" ;;
+    devkit)      cd "$ONI_DIR/ONI_DevKit" && $PYTHON -m http.server 9091 --bind 127.0.0.1 ;;
+    help|--help|-h)
+        echo "ONI - Orbital Network Infrastructure"
+        echo "Usage: oni <command>"
+        echo "Commands: start|node|ons|registrar|browser|manager|devkit"
+        ;;
+    *)           echo "Usage: oni <command> (start|node|ons|registrar|browser|manager|devkit)" ;;
+esac
+CLI
+chmod +x /usr/bin/oni
+
+# Update desktop database
+update-desktop-database /usr/share/applications 2>/dev/null || true
+
+echo "✅ ONI installed successfully!"
+echo "   Run: oni browser (to launch Orbit Browser)"
+echo "   Run: oni manager (to launch ONI Manager)"
+echo "   Find apps in your application menu"

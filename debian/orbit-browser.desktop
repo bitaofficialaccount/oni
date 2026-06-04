@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Orbit Browser
+Comment=Browse the ONI decentralized web
+Exec=python3 /usr/share/oni/apps/orbit_browser_app.py
+Icon=/usr/share/oni/apps/orbit-browser-icon.png
+Terminal=false
+Type=Application
+Categories=Network;WebBrowser;
+Keywords=oni;orbit;browser;web;decentralized;
+StartupWMClass=OrbitBrowser
