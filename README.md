@@ -21,7 +21,7 @@ Orbital Network Infrastructure v1.0
 ## 🚀 One-Click Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/technicdev/ONI/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/bitaofficialaccount/oni/main/install.sh | bash
 ```
 
 This will install everything you need:
@@ -66,7 +66,7 @@ oni browser
 
 ### 1. Install ONI
 ```bash
-curl -fsSL https://raw.githubusercontent.com/technicdev/ONI/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/bitaofficialaccount/oni/main/install.sh | bash
 ```
 
 ### 2. Start the ONI Manager
@@ -108,7 +108,7 @@ For always-on hosting, run ONI with Docker:
 curl -fsSL https://get.docker.com | sh
 
 # Clone and run
-git clone https://github.com/technicdev/ONI.git /opt/oni
+git clone https://github.com/bitaofficialaccount/oni.git /opt/oni
 cd /opt/oni
 docker-compose up -d
 ```

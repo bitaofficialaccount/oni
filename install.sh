@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # ONI - Orbital Network Infrastructure
 # One-click installer for GitHub
-# Usage: curl -fsSL https://raw.githubusercontent.com/technicdev/ONI/main/install.sh | bash
-# Or:   bash <(curl -fsSL https://raw.githubusercontent.com/technicdev/ONI/main/install.sh)
+# Usage: curl -fsSL https://raw.githubusercontent.com/bitaofficialaccount/oni/main/install.sh | bash
+# Or:   bash <(curl -fsSL https://raw.githubusercontent.com/bitaofficialaccount/oni/main/install.sh)
 
 set -e
 
@@ -38,7 +38,7 @@ INSTALL_DEVKIT=true
 BROWSER_ONLY=false
 MANAGER_ONLY=false
 CLONE_REPO=true
-REPO_URL="https://github.com/technicdev/ONI.git"
+REPO_URL="https://github.com/bitaofficialaccount/oni.git"
 BRANCH="main"
 
 usage() {
@@ -101,7 +101,7 @@ if [ "$CLONE_REPO" = true ]; then
         else
             git clone --depth 1 --branch $BRANCH "$REPO_URL" "$INSTALL_DIR/tmp_oni" 2>/dev/null || {
                 echo -e "  ${YELLOW}⚠ Git clone failed, downloading ZIP instead...${NC}"
-                curl -fsSL "https://github.com/technicdev/ONI/archive/refs/heads/$BRANCH.zip" -o /tmp/oni.zip
+                curl -fsSL "https://github.com/bitaofficialaccount/oni/archive/refs/heads/$BRANCH.zip" -o /tmp/oni.zip
                 unzip -qo /tmp/oni.zip -d /tmp/oni_extract
                 cp -r /tmp/oni_extract/*/* "$INSTALL_DIR/" 2>/dev/null || true
                 rm -rf /tmp/oni.zip /tmp/oni_extract
@@ -113,7 +113,7 @@ if [ "$CLONE_REPO" = true ]; then
         fi
     else
         echo -e "  ${YELLOW}⚠ Git not found, downloading ZIP...${NC}"
-        curl -fsSL "https://github.com/technicdev/ONI/archive/refs/heads/$BRANCH.zip" -o /tmp/oni.zip
+        curl -fsSL "https://github.com/bitaofficialaccount/oni/archive/refs/heads/$BRANCH.zip" -o /tmp/oni.zip
         unzip -qo /tmp/oni.zip -d /tmp/oni_extract
         cp -r /tmp/oni_extract/*/* "$INSTALL_DIR/" 2>/dev/null || true
         rm -rf /tmp/oni.zip /tmp/oni_extract
