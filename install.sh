@@ -134,8 +134,10 @@ for dep in "${DEPS[@]}"; do
     echo -e "  ${YELLOW}⚠ Could not install $dep, try: sudo pip3 install $dep${NC}"
 done
 
-# Install supabase client if available
-$PYTHON -m pip install "supabase-py>=2.0" -q 2>/dev/null || $PYTHON -m pip install "supabase-py>=2.0" --user -q 2>/dev/null || true
+# Install supabase client if available (optional - for cloud backbone)
+$PYTHON -m pip install "supabase>=2.0" -q 2>/dev/null || \
+$PYTHON -m pip install "supabase>=2.0" --user -q 2>/dev/null || \
+$PYTHON -m pip install "supabase>=2.0" --break-system-packages -q 2>/dev/null || true
 
 # Install tkinter if missing
 if $PYTHON -c "import tkinter" 2>/dev/null; then
