@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}All Registered .orb Domains{% endblock %}
+{% block content %}
+<section>
+    <h1>📋 All Registered .orb Domains</h1>
+    <p class="subtitle">Browse all domains registered on the ONI network</p>
+    
+    {% if domains %}
+    <div class="domain-grid">
+        {% for domain, info in domains.items() %}
+        <div class="domain-card">
+            <div class="domain-card-header">
+                <span class="domain-name">{{ domain }}</span>
+                <span class="tld-badge">{{ info.tld }}</span>
+            </div>
+            <div class="domain-card-body">
+                <p><strong>Owner:</strong> {{ info.owner }}</p>
+                <p><strong>Status:</strong> <span class="status {{ info.status }}">{{ info.status }}</span></p>
+                <p><strong>TLD:</strong> .{{ info.tld }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p>No domains registered yet. <a href="/register">Be the first!</a></p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONI DevKit - Developer Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+               background: #0a0a1a; color: #e0e0ff; line-height: 1.6; }
+        
+        .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100vh;
+                   background: #0d0d2b; border-right: 1px solid #1a1a3a; overflow-y: auto;
+                   padding: 20px 0; z-index: 100; }
+        .sidebar h2 { color: #00ffcc; font-size: 1.1em; padding: 10px 20px; 
+                      border-bottom: 1px solid #1a1a3a; margin-bottom: 10px; }
+        .sidebar a { display: block; padding: 8px 20px; color: #8888aa; text-decoration: none;
+                     font-size: 0.9em; transition: all 0.2s; }
+        .sidebar a:hover { color: #00ff88; background: #111133; }
+        .sidebar a.active { color: #00ffcc; background: #1a1a3a; border-left: 3px solid #00ff88; }
+        .sidebar .section-label { padding: 15px 20px 5px; color: #555; font-size: 0.75em;
+                                  text-transform: uppercase; letter-spacing: 1px; }
+        .sidebar-logo { padding: 20px; text-align: center; border-bottom: 1px solid #1a1a3a;
+                        margin-bottom: 15px; }
+        .sidebar-logo .logo { font-size: 1.5em; color: #00ffcc; font-weight: bold; }
+        .sidebar-logo .version { color: #555; font-size: 0.8em; }
+        
+        .main { margin-left: 280px; padding: 40px 60px; max-width: 900px; }
+        
+        h1 { font-size: 2.2em; color: #00ffcc; margin-bottom: 10px; }
+        h2 { font-size: 1.6em; color: #00ffaa; margin: 40px 0 15px; padding-bottom: 8px;
+             border-bottom: 1px solid #1a1a3a; }
+        h3 { font-size: 1.2em; color: #00ff88; margin: 25px 0 10px; }
+        h4 { color: #e0e0ff; margin: 15px 0 5px; }
+        
+        p { margin: 10px 0; color: #b0b0d0; }
+        
+        code { background: #000; color: #ffaa00; padding: 2px 6px; border-radius: 3px; 
+               font-family: 'Courier New', monospace; font-size: 0.9em; }
+        pre { background: #0d0d2b; border: 1px solid #1a1a3a; border-radius: 8px; 
+              padding: 20px; margin: 15px 0; overflow-x: auto; }
+        pre code { background: transparent; color: #e0e0ff; padding: 0; font-size: 0.85em; }
+        
+        .note { background: #00336622; border: 1px solid #003366; border-radius: 8px; 
+                padding: 15px; margin: 15px 0; }
+        .note strong { color: #00ffcc; }
+        
+        .tip { background: #00330022; border: 1px solid #00ff8833; border-radius: 8px; 
+               padding: 15px; margin: 15px 0; }
+        .tip strong { color: #00ff88; }
+        
+        .warning { background: #33330022; border: 1px solid #ffaa0033; border-radius: 8px; 
+                   padding: 15px; margin: 15px 0; }
+        .warning strong { color: #ffaa00; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { padding: 10px 15px; text-align: left; border-bottom: 1px solid #1a1a3a; }
+        th { background: #111133; color: #00ffcc; font-weight: normal; }
+        td { color: #b0b0d0; }
+        tr:hover td { background: #11113355; }
+        
+        .step { background: #111133; border: 1px solid #1a1a3a; border-radius: 8px; 
+                padding: 20px; margin: 15px 0; position: relative; }
+        .step .number { position: absolute; top: -12px; left: 20px; background: #00ff88;
+                       color: #0a0a1a; width: 24px; height: 24px; border-radius: 50%;
+                       text-align: center; font-size: 0.8em; font-weight: bold; line-height: 24px; }
+        .step h4 { margin-top: 0; padding-left: 0; }
+        
+        .badge { display: inline-block; background: #003366; color: #00ffcc; 
+                 padding: 3px 10px; border-radius: 4px; font-size: 0.8em; margin: 2px; }
+        .badge-success { background: #003300; color: #00ff88; }
+        .badge-warning { background: #333300; color: #ffaa00; }
+        
+        ul, ol { margin: 10px 0; padding-left: 25px; }
+        li { margin: 5px 0; color: #b0b0d0; }
+        
+        .card { background: #111133; border: 1px solid #1a1a3a; border-radius: 10px; 
+                padding: 25px; margin: 15px 0; }
+        .card h3 { margin-top: 0; }
+        
+        .cmd { background: #0d0d2b; border: 1px solid #1a1a3a; border-radius: 8px; 
+               padding: 15px; margin: 10px 0; font-family: 'Courier New', monospace;
+               color: #00ffcc; font-size: 0.9em; }
+        .cmd::before { content: "$ "; color: #00ff88; }
+        
+        .diagram { background: #0d0d2b; border: 1px solid #1a1a3a; border-radius: 8px; 
+                   padding: 20px; margin: 15px 0; font-family: 'Courier New', monospace;
+                   color: #8888aa; text-align: center; line-height: 1.8; }
+        .diagram .highlight { color: #00ffcc; }
+        .diagram .arrow { color: #ffaa00; }
+        .diagram .node { color: #00ff88; }
+        .diagram .label { color: #8888aa; }
+        
+        .footer { text-align: center; padding: 40px; color: #444; font-size: 0.85em;
+                  border-top: 1px solid #1a1a3a; margin-top: 60px; }
+        
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main { margin-left: 0; padding: 20px; }
+        }
+        
+        /* Syntax highlighting */
+        .keyword { color: #ff77ff; }
+        .string { color: #ffaa00; }
+        .comment { color: #555; }
+        .function { color: #00ffcc; }
+        .variable { color: #00ff88; }
+        .number { color: #ff77ff; }
+        .operator { color: #ffaa00; }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-logo">
+        <div class="logo">🌐 ONI DevKit</div>
+        <div class="version">v1.0 • Developer Documentation</div>
+    </div>
+    
+    <div class="section-label">Getting Started</div>
+    <a href="#overview" class="active">📋 Overview</a>
+    <a href="#quickstart">🚀 Quick Start</a>
+    <a href="#installation">📦 Installation</a>
+    
+    <div class="section-label">Core Concepts</div>
+    <a href="#architecture">🏗️ Architecture</a>
+    <a href="#domains">🌍 .orb Domains</a>
+    <a href="#protocol">📡 ONI Protocol</a>
+    
+    <div class="section-label">Development</div>
+    <a href="#hosting">📂 Hosting a Site</a>
+    <a href="#domain-linking">🔗 Domain Linking</a>
+    <a href="#self-hosting">🖥️ Self-Hosting</a>
+    <a href="#docker">🐳 Docker Deployment</a>
+    <a href="#api">🔌 API Reference</a>
+    
+    <div class="section-label">Network</div>
+    <a href="#p2p-sync">🔄 P2P Sync</a>
+    <a href="#ons">🧭 ONS System</a>
+    <a href="#peers">👥 Peer Management</a>
+    
+    <div class="section-label">Resources</div>
+    <a href="#examples">📚 Examples</a>
+    <a href="#troubleshooting">🔧 Troubleshooting</a>
+    <a href="#faq">❓ FAQ</a>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+
+<h1>🌐 ONI Developer Kit</h1>
+<p><strong>Build and deploy websites on the decentralized ONI network.</strong></p>
+<p>This developer kit provides everything you need to create, host, and manage .orb websites on the Orbital Network Infrastructure.</p>
+
+<!-- Overview -->
+<h2 id="overview">📋 Overview</h2>
+<p>ONI (Orbital Network Infrastructure) is a fully decentralized peer-to-peer internet network. It replaces traditional web infrastructure (DNS servers, hosting providers, centralized registrars) with a distributed network where users host and resolve content themselves.</p>
+
+<div class="diagram">
+<span class="highlight">ONI NETWORK OVERVIEW</span>
+
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│  <span class="node">User A</span>      │ ←──→ │  <span class="node">User B</span>      │ ←──→ │  <span class="node">User C</span>      │
+│  Browser     │     │  Browser     │     │  Browser     │
+│  + Node      │     │  + Node      │     │  + Node      │
+│  + Hosting   │     │  + Hosting   │     │  + Hosting   │
+└─────────────┘     └─────────────┘     └─────────────┘
+       │                    │                    │
+       └────────────────────┼────────────────────┘
+                           │
+                    <span class="arrow">▼</span>
+          ╔══════════════════════════╗
+          ║   <span class="highlight">ONI P2P Network</span>       ║
+          ║   WebSocket / WebRTC     ║
+          ║   Decentralized DNS      ║
+          ╚══════════════════════════╝
+</div>
+
+<div class="card">
+    <h3>✨ Key Features for Developers</h3>
+    <ul>
+        <li><strong>Free .orb domains</strong> — No registration costs, no renewal fees</li>
+        <li><strong>Self-hosting</strong> — Host directly from your own machine or server</li>
+        <li><strong>Docker support</strong> — Deploy with a single docker-compose command</li>
+        <li><strong>P2P sync</strong> — Content automatically syncs across the network</li>
+        <li><strong>Standard HTML5</strong> — Build with HTML, CSS, JS — no special framework needed</li>
+        <li><strong>Domain linking</strong> — Link multiple domains to the same site</li>
+    </ul>
+</div>
+
+<!-- Quick Start -->
+<h2 id="quickstart">🚀 Quick Start</h2>
+
+<div class="step">
+    <div class="number">1</div>
+    <h4>Install ONI</h4>
+    <div class="cmd">curl -fsSL https://raw.githubusercontent.com/technicdev/ONI/main/install.sh | bash</div>
+    <p>Or clone the repository:</p>
+    <div class="cmd">git clone https://github.com/technicdev/ONI.git ~/ONI && cd ~/ONI && bash install.sh --no-clone</div>
+</div>
+
+<div class="step">
+    <div class="number">2</div>
+    <h4>Start the ONI Manager</h4>
+    <div class="cmd">oni manager</div>
+    <p>Or directly:</p>
+    <div class="cmd">python3 ~/ONI/apps/oni_manager.py</div>
+</div>
+
+<div class="step">
+    <div class="number">3</div>
+    <h4>Register a .orb Domain</h4>
+    <p>In the ONI Manager, go to the <strong>Domains</strong> tab, enter your domain name, and click <strong>Register Domain</strong>.</p>
+    <p>Or use the web registrar at <code>http://127.0.0.1:8080</code></p>
+</div>
+
+<div class="step">
+    <div class="number">4</div>
+    <h4>Host Your Website</h4>
+    <p>Create an HTML file and host it:</p>
+    <div class="cmd">mkdir -p ~/mysite && echo "<h1>Hello ONI!</h1>" > ~/mysite/index.html</div>
+    <div class="cmd">oni node --host-domain mysite.orb ~/mysite</div>
+</div>
+
+<div class="step">
+    <div class="number">5</div>
+    <h4>Browse Your Site</h4>
+    <p>Launch the Orbit Browser and navigate to:</p>
+    <div class="cmd">oni browser --url orb://mysite.orb</div>
+    <p>Or open the browser app and type <code>orb://mysite.orb</code> in the address bar.</p>
+</div>
+
+<!-- Installation -->
+<h2 id="installation">📦 Installation</h2>
+
+<h3>System Requirements</h3>
+<table>
+    <tr><th>Component</th><th>Requirement</th></tr>
+    <tr><td>Python</td><td>3.8 or higher</td></tr>
+    <tr><td>OS</td><td>Linux (recommended), macOS, Windows (WSL2)</td></tr>
+    <tr><td>Disk Space</td><td>~100 MB for installation</td></tr>
+    <tr><td>Network</td><td>Ports 6881 (P2P), 5353 (DNS), 8080 (Web)</td></tr>
+</table>
+
+<h3>One-Click Install</h3>
+<div class="cmd">curl -fsSL https://raw.githubusercontent.com/technicdev/ONI/main/install.sh | bash</div>
+
+<h3>Manual Install</h3>
+<pre><code># Clone the repository
+git clone https://github.com/technicdev/ONI.git ~/ONI
+cd ~/ONI
+
+# Install Python dependencies
+pip3 install websockets flask requests aiohttp
+
+# Create data directories
+mkdir -p data/{cache,domains,peers,logs}
+
+# Make CLI accessible
+mkdir -p ~/.local/bin
+cp apps/oni ~/.local/bin/ 2>/dev/null || true
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc</code></pre>
+
+<h3>Docker Install</h3>
+<pre><code># Pull the ONI Docker image (once available)
+docker pull technicdev/oni:latest
+
+# Or build from source
+cd ~/ONI
+docker build -t oni-network .
+
+# Run with docker-compose
+docker-compose up -d</code></pre>
+
+<!-- Architecture -->
+<h2 id="architecture">🏗️ Architecture</h2>
+
+<p>ONI consists of four main components that work together to create a decentralized web:</p>
+
+<div class="diagram">
+<span class="highlight">ONI COMPONENT ARCHITECTURE</span>
+
+┌────────────────────────────────────────────────────────────┐
+│                    <span class="node">Orbit Browser</span>                           │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │
+│  │ ONI      │  │ ONS      │  │ HTML     │  │ Sync     │  │
+│  │ Protocol │  │ Resolver │  │ Renderer │  │ Engine   │  │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘  │
+└────────────────────────┬───────────────────────────────────┘
+                         │
+┌────────────────────────▼───────────────────────────────────┐
+│                    <span class="node">ONI Manager</span>                            │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │
+│  │ Node     │  │ Domain   │  │ Hosting  │  │ Settings │  │
+│  │ Control  │  │ Registry │  │ Manager  │  │          │  │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘  │
+└────────────────────────┬───────────────────────────────────┘
+                         │
+┌────────────────────────▼───────────────────────────────────┐
+│                    <span class="node">ONI Network Layer</span>                        │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  │
+│  │ P2P Node │  │ ONS      │  │ Content  │  │ DHT      │  │
+│  │ (WebSock)│  │ Server   │  │ Storage  │  │ Routing  │  │
+│  └──────────┘  └──────────┘  └──────────┘  └──────────┘  │
+└────────────────────────────────────────────────────────────┘
+</div>
+
+<table>
+    <tr><th>Component</th><th>Role</th><th>Port</th></tr>
+    <tr><td>ONI P2P Node</td><td>Peer-to-peer network communication</td><td>6881</td></tr>
+    <tr><td>ONS Server</td><td>Distributed DNS for .orb domains</td><td>5353</td></tr>
+    <tr><td>Domain Registrar</td><td>Free .orb domain registration web app</td><td>8080</td></tr>
+    <tr><td>Orbit Browser</td><td>ONI network browser (desktop app)</td><td>9090</td></tr>
+</table>
+
+<!-- Domains -->
+<h2 id="domains">🌍 .orb Domains</h2>
+
+<h3>Available TLDs</h3>
+<table>
+    <tr><th>TLD</th><th>Purpose</th><th>Example</th></tr>
+    <tr><td><code>.orb</code></td><td>Generic domains</td><td>mysite.orb</td></tr>
+    <tr><td><code>.orb.be</code></td><td>Belgium</td><td>mijnsite.orb.be</td></tr>
+    <tr><td><code>.orb.uk</code></td><td>United Kingdom</td><td>mysite.orb.uk</td></tr>
+    <tr><td><code>.orb.org</code></td><td>Organizations</td><td>myorg.orb.org</td></tr>
+    <tr><td><code>.orb.fun</code></td><td>Fun / personal</td><td>myproject.orb.fun</td></tr>
+    <tr><td><code>.orb.dev</code></td><td>Developers</td><td>myapp.orb.dev</td></tr>
+    <tr><td><code>.orb.io</code></td><td>Tech / startups</td><td>mystartup.orb.io</td></tr>
+    <tr><td><code>.orb.*</code></td><td>Custom TLDs</td><td>anything.orb.custom</td></tr>
+</table>
+
+<h3>Domain Rules</h3>
+<ul>
+    <li>Domain names: 1-63 characters</li>
+    <li>Allowed characters: a-z, 0-9, hyphens (-)</li>
+    <li>No hyphens at start or end</li>
+    <li>Domains are case-insensitive (stored lowercase)</li>
+    <li>Domains are FREE to register — no costs, no renewals</li>
+</ul>
+
+<div class="note">
+    <strong>Note:</strong> .orb domains are not traditional DNS domains. They only work within the ONI network via the Orbit Browser or ONI-compatible tools.
+</div>
+
+<!-- Protocol -->
+<h2 id="protocol">📡 ONI Protocol</h2>
+
+<h3>Message Types</h3>
+<table>
+    <tr><th>Message</th><th>Description</th></tr>
+    <tr><td><code>peer_discovery</code></td><td>Discover other peers on the network</td></tr>
+    <tr><td><code>peer_list</code></td><td>Response with list of known peers</td></tr>
+    <tr><td><code>ping</code> / <code>pong</code></td><td>Health check between peers</td></tr>
+    <tr><td><code>content_request</code></td><td>Request content for a domain</td></tr>
+    <tr><td><code>content_response</code></td><td>Response with requested content</td></tr>
+    <tr><td><code>domain_resolve</code></td><td>Resolve a .orb domain to a host</td></tr>
+    <tr><td><code>domain_response</code></td><td>Response with domain resolution info</td></tr>
+    <tr><td><code>domain_register</code></td><td>Register a new .orb domain</td></tr>
+</table>
+
+<!-- Hosting -->
+<h2 id="hosting">📂 Hosting a Site</h2>
+
+<h3>Creating Your Website</h3>
+<p>ONI supports standard HTML5 websites. Create your files just like you would for any web server:</p>
+
+<pre><code>mysite.orb/
+├── index.html
+├── style.css
+├── script.js
+├── images/
+│   └── logo.png
+└── pages/
+    ├── about.html
+    └── contact.html</code></pre>
+
+<h3>Hosting via ONI Manager</h3>
+<ol>
+    <li>Open the ONI Manager app</li>
+    <li>Go to the <strong>Hosting</strong> tab</li>
+    <li>Enter your domain (e.g., <code>mysite.orb</code>)</li>
+    <li>Browse to your website directory</li>
+    <li>Click <strong>Host Website</strong></li>
+</ol>
+
+<h3>Hosting via CLI</h3>
+<div class="cmd">oni node --host-domain mysite.orb /path/to/mysite.orb</div>
+<p>Or directly with Python:</p>
+<div class="cmd">python3 ~/ONI/p2p/oni_node.py --host-domain mysite.orb /path/to/mysite.orb</div>
+
+<h3>Hosting Multiple Domains</h3>
+<div class="cmd">oni node --host-domain site1.orb /path/to/site1 --host-domain site2.orb /path/to/site2</div>
+
+<h3>Example: Hello World Site</h3>
+<pre><code># Create a simple website
+mkdir -p ~/myfirstsite
+cat > ~/myfirstsite/index.html << 'EOF'
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My First .orb Site</title>
+    <style>
+        body { background: #0a0a1a; color: #00ffcc; 
+               font-family: system-ui; text-align: center; padding: 50px; }
+        h1 { font-size: 3em; }
+    </style>
+</head>
+<body>
+    <h1>🚀 Hello ONI!</h1>
+    <p>This site is hosted on the decentralized web!</p>
+</body>
+</html>
+EOF
+
+# Host it
+oni node --host-domain myfirstsite.orb ~/myfirstsite</code></pre>
+
+<!-- Domain Linking -->
+<h2 id="domain-linking">🔗 Domain Linking</h2>
+
+<p>Domain linking allows you to point multiple .orb domains to the same website content. This is useful for:</p>
+<ul>
+    <li>Having multiple TLDs for the same site (e.g., <code>mysite.orb</code> and <code>mysite.orb.dev</code>)</li>
+    <li>Creating redirects or aliases</li>
+    <li>Setting up subdomains</li>
+</ul>
+
+<h3>How Domain Linking Works</h3>
+<p>When you host a site under one domain, you can create DNS records that point other domains to the same content. The ONS system resolves the linked domain to the hosting node.</p>
+
+<div class="diagram">
+<span class="highlight">DOMAIN LINKING ARCHITECTURE</span>
+
+<span class="label">User types:</span>                    <span class="label">DNS Resolution:</span>
+<span class="node">orb://mysite.orb</span>  ──────→  <span class="highlight">ONS</span>  ──────→  <span class="node">Node A (hosting)</span>
+                                    │
+<span class="node">orb://mysite.orb.dev</span>  ──→  <span class="highlight">ONS</span>  ──┘
+                                    │
+<span class="node">orb://mysite.orb.fun</span>  ──→  <span class="highlight">ONS</span>  ──┘  (All resolve to same content)
+</div>
+
+<h3>How to Link Domains</h3>
+<div class="step">
+    <div class="number">1</div>
+    <h4>Register All Domains</h4>
+    <p>Register each domain you want to link (e.g., <code>mysite.orb</code>, <code>mysite.orb.dev</code>, <code>mysite.orb.fun</code>)</p>
+</div>
+
+<div class="step">
+    <div class="number">2</div>
+    <h4>Host Your Content Under the Primary Domain</h4>
+    <div class="cmd">oni node --host-domain mysite.orb /path/to/site</div>
+</div>
+
+<div class="step">
+    <div class="number">3</div>
+    <h4>Create DNS Records for Linked Domains</h4>
+    <p>Use the ONS API or ONI Manager to create CNAME-like records:</p>
+    <div class="cmd">curl -X POST http://127.0.0.1:5353/link \
+  -H "Content-Type: application/json" \
+  -d '{"domain": "mysite.orb.dev", "target": "mysite.orb"}'</div>
+</div>
+
+<div class="step">
+    <div class="number">4</div>
+    <h4>Verify Linking</h4>
+    <div class="cmd">curl http://127.0.0.1:5353/resolve/mysite.orb.dev</div>
+    <p>When users visit <code>orb://mysite.orb.dev</code>, they'll see the same content as <code>orb://mysite.orb</code>.</p>
+</div>
+
+<div class="tip">
+    <strong>Pro Tip:</strong> You can also use the ONI Manager's Domains tab to manage linked domains through the GUI.
+</div>
+
+<!-- Self-Hosting -->
+<h2 id="self-hosting">🖥️ Self-Hosting</h2>
+
+<p>Self-hosting means running ONI on your own hardware to serve your .orb website directly from your machine. No third-party hosting provider needed.</p>
+
+<h3>Self-Hosting Options</h3>
+
+<div class="card">
+    <h3>🖥️ Option 1: Local Machine (Development)</h3>
+    <p>Run directly on your computer for development and testing.</p>
+    <h4>Pros:</h4>
+    <ul>
+        <li>Easy to set up</li>
+        <li>No additional hardware needed</li>
+        <li>Immediate changes</li>
+    </ul>
+    <h4>Cons:</h4>
+    <ul>
+        <li>Only available when your computer is on</li>
+        <li>Limited to your network</li>
+    </ul>
+</div>
+
+<div class="card">
+    <h3>🐳 Option 2: Docker Container (Production)</h3>
+    <p>Run ONI in a Docker container for reliable, always-on hosting.</p>
+    <h4>Pros:</h4>
+    <ul>
+        <li>Runs 24/7</li>
+        <li>Easy to deploy and update</li>
+        <li>Isolated environment</li>
+        <li>Portable across servers</li>
+    </ul>
+    <h4>Cons:</h4>
+    <ul>
+        <li>Requires Docker knowledge</li>
+        <li>Needs a server or VPS</li>
+    </ul>
+</div>
+
+<div class="card">
+    <h3>☁️ Option 3: VPS/Cloud Server</h3>
+    <p>Run ONI on a $5/month VPS from any provider (DigitalOcean, Linode, etc.).</p>
+    <h4>Pros:</h4>
+    <ul>
+        <li>Always online</li>
+        <li>Static IP address (important for peer discovery)</li>
+        <li>Low cost</li>
+    </ul>
+    <h4>Cons:</h4>
+    <ul>
+        <li>Requires basic server administration</li>
+    </ul>
+</div>
+
+<h3>Self-Hosting Checklist</h3>
+<table>
+    <tr><th>Item</th><th>Details</th></tr>
+    <tr><td>Python 3.8+</td><td>Required for ONI runtime</td></tr>
+    <tr><td>Open ports</td><td>6881 (P2P), 5353 (ONS), 8080 (Web)</td></tr>
+    <tr><td>Static IP (optional)</td><td>Recommended for reliable peer discovery</td></tr>
+    <tr><td>Docker (optional)</td><td>For containerized deployment</td></tr>
+    <tr><td>Git</td><td>For updating ONI</td></tr>
+</table>
+
+<h3>Self-Hosting with Docker</h3>
+<pre><code># Clone ONI
+git clone https://github.com/technicdev/ONI.git /opt/oni
+cd /opt/oni
+
+# Copy your website
+cp -r /path/to/yoursite.orb /opt/oni/sites/yoursite.orb
+
+# Start with docker-compose
+docker-compose up -d
+
+# Check status
+docker-compose ps
+
+# View logs
+docker-compose logs -f</code></pre>
+
+<!-- Docker -->
+<h2 id="docker">🐳 Docker Deployment</h2>
+
+<h3>docker-compose.yml</h3>
+<p>The <code>docker-compose.yml</code> file defines all ONI services. Here's the complete configuration:</p>
+
+<div class="note">
+    <strong>Prerequisites:</strong> Docker and Docker Compose must be installed on your system.
+    <br>Install Docker: <code>curl -fsSL https://get.docker.com | sh</code>
+</div>
+
+<pre><code>version: '3.8'
+
+services:
+  # ===== ONI P2P Node =====
+  oni-node:
+    build: .
+    container_name: oni-node
+    ports:
+      - "6881:6881"
+    volumes:
+      - ./data:/app/data
+      - ./sites:/app/sites
+    environment:
+      - ONI_NODE_PORT=6881
+      - ONI_HOST=0.0.0.0
+    command: python3 p2p/oni_node.py --host 0.0.0.0 --port 6881
+    restart: unless-stopped
+    networks:
+      - oni-network
+
+  # ===== ONS Server =====
+  ons-server:
+    build: .
+    container_name: oni-ons
+    ports:
+      - "5353:5353"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - ONS_PORT=5353
+    command: python3 ons/ons_server.py --port 5353
+    restart: unless-stopped
+    networks:
+      - oni-network
+
+  # ===== Domain Registrar =====
+  oni-registrar:
+    build: .
+    container_name: oni-registrar
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - REGISTRAR_PORT=8080
+    command: python3 orbit-registrar/registrar.py --port 8080
+    restart: unless-stopped
+    networks:
+      - oni-network
+
+  # ===== Orbit Browser (Web Mode) =====
+  orbit-browser:
+    build: .
+    container_name: orbit-browser
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - BROWSER_PORT=9090
+    command: python3 apps/orbit_browser_app.py --port 9090 --no-gui
+    restart: unless-stopped
+    networks:
+      - oni-network
+    depends_on:
+      - oni-node
+      - ons-server
+
+networks:
+  oni-network:
+    driver: bridge</code></pre>
+
+<h3>Dockerfile</h3>
+<pre><code>FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install dependencies
+RUN pip3 install --no-cache-dir websockets flask requests aiohttp
+
+# Copy ONI source
+COPY . .
+
+# Create data directories
+RUN mkdir -p data/{cache,domains,peers,logs} sites
+
+# Expose ports
+EXPOSE 6881 5353 8080 9090
+
+# Default command (override in docker-compose)
+CMD ["python3", "start_oni.py"]</code></pre>
+
+<h3>Docker Deployment Steps</h3>
+<div class="step">
+    <div class="number">1</div>
+    <h4>Install Docker</h4>
+    <div class="cmd">curl -fsSL https://get.docker.com | sh</div>
+</div>
+
+<div class="step">
+    <div class="number">2</div>
+    <h4>Clone ONI and Configure</h4>
+    <div class="cmd">git clone https://github.com/technicdev/ONI.git /opt/oni</div>
+    <div class="cmd">cd /opt/oni && mkdir -p sites data</div>
+</div>
+
+<div class="step">
+    <div class="number">3</div>
+    <h4>Add Your Website</h4>
+    <div class="cmd">cp -r /path/to/yoursite.orb /opt/oni/sites/</div>
+</div>
+
+<div class="step">
+    <div class="number">4</div>
+    <h4>Start with Docker Compose</h4>
+    <div class="cmd">docker-compose up -d</div>
+</div>
+
+<div class="step">
+    <div class="number">5</div>
+    <h4>Verify It's Running</h4>
+    <div class="cmd">docker-compose ps</div>
+    <div class="cmd">curl http://localhost:8080  # Registrar</div>
+    <div class="cmd">curl http://localhost:5353  # ONS</div>
+</div>
+
+<h3>Docker Management Commands</h3>
+<pre><code># View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+
+# Update ONI
+docker-compose down
+git pull origin main
+docker-compose up -d --build
+
+# Restart a specific service
+docker-compose restart oni-node
+
+# Scale nodes (run multiple)
+docker-compose up -d --scale oni-node=3</code></pre>
+
+<!-- API Reference -->
+<h2 id="api">🔌 API Reference</h2>
+
+<h3>ONS API</h3>
+<table>
+    <tr><th>Endpoint</th><th>Method</th><th>Description</th></tr>
+    <tr><td><code>/resolve/<domain></code></td><td>GET</td><td>Resolve a .orb domain</td></tr>
+    <tr><td><code>/register</code></td><td>POST</td><td>Register a new domain</td></tr>
+    <tr><td><code>/link</code></td><td>POST</td><td>Link a domain to another</td></tr>
+    <tr><td><code>/peers</code></td><td>GET</td><td>Get list of connected peers</td></tr>
+    <tr><td><code>/status</code></td><td>GET</td><td>Get server status</td></tr>
+</table>
+
+<h4>Resolve Domain</h4>
+<pre><code>curl http://127.0.0.1:5353/resolve/mysite.orb
+
+# Response:
+{
+  "domain": "mysite.orb",
+  "found": true,
+  "records": {
+    "host": "127.0.0.1",
+    "port": 6881,
+    "content_type": "text/html"
+  }
+}</code></pre>
+
+<h4>Register Domain</h4>
+<pre><code>curl -X POST http://127.0.0.1:5353/register \
+  -H "Content-Type: application/json" \
+  -d '{"domain": "mysite.orb"}'
+
+# Response:
+{
+  "success": true,
+  "message": "Domain mysite.orb registered",
+  "domain": "mysite.orb"
+}</code></pre>
+
+<h4>Link Domain</h4>
+<pre><code>curl -X POST http://127.0.0.1:5353/link \
+  -H "Content-Type: application/json" \
+  -d '{
+    "domain": "mysite.orb.dev",
+    "target": "mysite.orb"
+  }'
+
+# Response:
+{
+  "success": true,
+  "message": "mysite.orb.dev linked to mysite.orb"
+}</code></pre>
+
+<h3>ONI Node API</h3>
+<table>
+    <tr><th>Endpoint</th><th>Method</th><th>Description</th></tr>
+    <tr><td><code>/content/<domain>/<path></code></td><td>GET</td><td>Fetch content from a hosted domain</td></tr>
+    <tr><td><code>/peers</code></td><td>GET</td><td>List connected peers</td></tr>
+    <tr><td><code>/status</code></td><td>GET</td><td>Get node status</td></tr>
+</table>
+
+<h4>Fetch Content</h4>
+<pre><code>curl http://127.0.0.1:6881/content/mysite.orb/index.html
+
+# Response: HTML content of the page</code></pre>
+
+<h3>Registrar API</h3>
+<table>
+    <tr><th>Endpoint</th><th>Method</th><th>Description</th></tr>
+    <tr><td><code>/</code></td><td>GET</td><td>Registrar home page</td></tr>
+    <tr><td><code>/register</code></td><td>POST</td><td>Register a domain (web form)</td></tr>
+    <tr><td><code>/list</code></td><td>GET</td><td>List registered domains</td></tr>
+</table>
+
+<!-- P2P Sync -->
+<h2 id="p2p-sync">🔄 P2P Sync</h2>
+
+<p>The ONI network uses peer-to-peer synchronization to share content between users. When two or more users run ONI nodes, their systems automatically share:</p>
+
+<ul>
+    <li><strong>Domain registrations</strong> — Who owns which .orb domains</li>
+    <li><strong>Website content</strong> — Hosted site files</li>
+    <li><strong>Peer lists</strong> — Who's currently online</li>
+    <li><strong>DNS records</strong> — Domain resolution information</li>
+</ul>
+
+<h3>How Sync Works</h3>
+
+<div class="diagram">
+<span class="highlight">P2P SYNC FLOW</span>
+
+<span class="node">User A</span>                  <span class="node">User B</span>
+  │                          │
+  │  <span class="arrow">─── Announce self ───→</span>  │
+  │  <span class="arrow">←── Peer list ───────</span>  │
+  │                          │
+  │  <span class="arrow">─── Share domains ───→</span>  │
+  │  <span class="arrow">←── Share content ───</span>  │
+  │                          │
+  │  <span class="arrow">─── Sync bookmarks ──→</span>  │
+  │  <span class="arrow">←── Sync history ────</span>  │
+  │                          │
+  │  Both have the same     │
+  │  websites and data      │
+</div>
+
+<h3>Automatic Sync</h3>
+<p>The ONI node automatically:</p>
+<ol>
+    <li>Announces itself to the network every 30 seconds</li>
+    <li>Responds to peer discovery requests</li>
+    <li>Shares hosted domain information</li>
+    <li>Forwards content requests to peers hosting the requested domain</li>
+</ol>
+
+<h3>Manual Sync (Bookmarks & History)</h3>
+<p>In the Orbit Browser, use <strong>Tools → Sync with Device</strong> to manually sync bookmarks and history with another ONI user:</p>
+<div class="cmd">oni browser  # Then go to Tools > Sync with Device</div>
+<p>Enter the other user's IP address and port to initiate sync.</p>
+
+<h3>Cross-Device Data Sharing</h3>
+<p>When User A and User B both have ONI running:</p>
+<ul>
+    <li>User A registers <code>mysite.orb</code> and hosts content</li>
+    <li>User B's node discovers User A's node through the network</li>
+    <li>When User B visits <code>orb://mysite.orb</code>, their browser fetches the content from User A's node</li>
+    <li>Both users see the same website with the same content</li>
+</ul>
+
+<div class="tip">
+    <strong>Pro Tip:</strong> For the best sync experience, ensure both users have their ONI nodes running on ports that are reachable from each other's networks. For internet-wide sync, each node needs a public IP or port forwarding.
+</div>
+
+<!-- ONS System -->
+<h2 id="ons">🧭 ONS System</h2>
+
+<p>The Orbit Name System (ONS) is the decentralized DNS for .orb domains. It replaces traditional DNS with a P2P-based resolution system.</p>
+
+<h3>How ONS Works</h3>
+<ol>
+    <li>When a domain is registered, it's stored in the ONS registry</li>
+    <li>The registry is distributed across all ONI nodes</li>
+    <li>When a user navigates to <code>orb://mysite.orb</code>, the browser queries ONS</li>
+    <li>ONS returns the hosting node's address</li>
+    <li>The browser fetches content from that node</li>
+</ol>
+
+<div class="diagram">
+<span class="highlight">DOMAIN RESOLUTION FLOW</span>
+
+<span class="node">Browser</span>                    <span class="node">ONS</span>                    <span class="node">Hosting Node</span>
+  │                          │                          │
+  │  orb://mysite.orb        │                          │
+  │──────────────────────────→│                          │
+  │                          │                          │
+  │        Resolve domain    │                          │
+  │──────────────────────────→│                          │
+  │                          │                          │
+  │     Found at 192.168.1.5 │                          │
+  │←──────────────────────────│                          │
+  │                          │                          │
+  │    Fetch content          │                          │
+  │─────────────────────────────────────────────────────→│
+  │                          │                          │
+  │    HTML, CSS, JS         │                          │
+  │←─────────────────────────────────────────────────────│
+  │                          │                          │
+</div>
+
+<!-- Peers -->
+<h2 id="peers">👥 Peer Management</h2>
+
+<p>Peers are other ONI nodes on the network. Managing peers helps ensure your content is discoverable and you can access other users' sites.</p>
+
+<h3>Viewing Peers</h3>
+<p>In the ONI Manager, go to the <strong>Peers</strong> tab to see connected nodes.</p>
+<p>Via API:</p>
+<div class="cmd">curl http://127.0.0.1:5353/peers</div>
+
+<h3>Connecting to Peers</h3>
+<p>Peers are discovered automatically through:</p>
+<ul>
+    <li><strong>DHT (Distributed Hash Table)</strong> — Nodes find each other through the network</li>
+    <li><strong>Manual connection</strong> — Specify a peer's address directly</li>
+    <li><strong>Bootstrap nodes</strong> — Initial connection points for new nodes</li>
+</ul>
+
+<h3>Peer Status Codes</h3>
+<table>
+    <tr><th>Status</th><th>Description</th></tr>
+    <tr><td>🟢 <strong>Online</strong></td><td>Peer is connected and responding</td></tr>
+    <tr><td>🟡 <strong>Degraded</strong></td><td>Peer is reachable but slow</td></tr>
+    <tr><td>🔴 <strong>Offline</strong></td><td>Peer is not responding</td></tr>
+    <tr><td>⚪ <strong>Unknown</strong></td><td>Peer discovered but not yet connected</td></tr>
+</table>
+
+<!-- Examples -->
+<h2 id="examples">📚 Examples</h2>
+
+<h3>Example 1: Personal Blog</h3>
+<pre><code>myblog.orb/
+├── index.html        # Blog home page
+├── style.css         # Blog styling
+├── posts/
+│   ├── post1.html    # Blog post 1
+│   └── post2.html    # Blog post 2
+└── images/
+    └── header.png    # Blog images
+
+# Host it
+oni node --host-domain myblog.orb /path/to/myblog.orb</code></pre>
+
+<h3>Example 2: Business Site with Multiple Domains</h3>
+<pre><code># Register multiple TLDs for the same business
+Register: mybusiness.orb
+Register: mybusiness.orb.org
+Register: mybusiness.orb.io
+
+# Create DNS links
+curl -X POST http://127.0.0.1:5353/link \
+  -d '{"domain": "mybusiness.orb.org", "target": "mybusiness.orb"}'
+curl -X POST http://127.0.0.1:5353/link \
+  -d '{"domain": "mybusiness.orb.io", "target": "mybusiness.orb"}'
+
+# Host once, all domains point to same content
+oni node --host-domain mybusiness.orb /path/to/site</code></pre>
+
+<h3>Example 3: Web App</h3>
+<pre><code>myapp.orb/
+├── index.html        # Single page app
+├── app.js            # JavaScript application
+├── style.css         # App styling
+└── manifest.json     # Web app manifest
+
+# For dynamic apps, use JavaScript with the ONI API
+# index.html:
+<script>
+  // Fetch data from other ONI nodes
+  fetch('orb://api.orb/data')
+    .then(response => response.text())
+    .then(data => console.log(data));
+</script></code></pre>
+
+<!-- Troubleshooting -->
+<h2 id="troubleshooting">🔧 Troubleshooting</h2>
+
+<h3>Common Issues</h3>
+
+<div class="card">
+    <h3>🔴 "Cannot connect to ONI node"</h3>
+    <p><strong>Cause:</strong> The ONI P2P node is not running</p>
+    <p><strong>Solution:</strong></p>
+    <ol>
+        <li>Open the ONI Manager</li>
+        <li>Click <strong>Start All</strong> or start individual components</li>
+        <li>Verify with: <code>curl http://127.0.0.1:6881/status</code></li>
+    </ol>
+</div>
+
+<div class="card">
+    <h3>🔴 "Domain not found"</h3>
+    <p><strong>Cause:</strong> The domain hasn't been registered, or ONS is not running</p>
+    <p><strong>Solution:</strong></p>
+    <ol>
+        <li>Check ONS server is running: <code>curl http://127.0.0.1:5353/status</code></li>
+        <li>Register your domain through the ONI Manager or Registrar</li>
+        <li>Wait a few seconds for the registration to propagate</li>
+    </ol>
+</div>
+
+<div class="card">
+    <h3>🔴 "Port already in use"</h3>
+    <p><strong>Cause:</strong> Another application is using the same port</p>
+    <p><strong>Solution:</strong></p>
+    <ol>
+        <li>Find what's using the port: <code>sudo lsof -i :6881</code></li>
+        <li>Change the port in ONI Manager settings</li>
+        <li>Or stop the conflicting application</li>
+    </ol>
+</div>
+
+<div class="card">
+    <h3>🔴 "No peers found"</h3>
+    <p><strong>Cause:</strong> No other ONI nodes are reachable on your network</p>
+    <p><strong>Solution:</strong></p>
+    <ol>
+        <li>Ensure other ONI users are online</li>
+        <li>Check firewall settings for incoming connections</li>
+        <li>Try manual sync with a specific peer address</li>
+        <li>Your node will still work for local browsing</li>
+    </ol>
+</div>
+
+<div class="card">
+    <h3>🔴 "Docker container exits immediately"</h3>
+    <p><strong>Cause:</strong> Docker build issues or missing dependencies</p>
+    <p><strong>Solution:</strong></p>
+    <ol>
+        <li>Rebuild: <code>docker-compose build --no-cache</code></li>
+        <li>Check logs: <code>docker-compose logs oni-node</code></li>
+        <li>Ensure Dockerfile is in the correct directory</li>
+    </ol>
+</div>
+
+<!-- FAQ -->
+<h2 id="faq">❓ Frequently Asked Questions</h2>
+
+<div class="card">
+    <h3>Q: Are .orb domains really free?</h3>
+    <p><strong>A:</strong> Yes! .orb domains are completely free to register with no renewal costs. They are managed by the ONI community and there's no central authority charging fees.</p>
+</div>
+
+<div class="card">
+    <h3>Q: Can I use my own domain (like .com) with ONI?</h3>
+    <p><strong>A:</strong> Currently, ONI only supports .orb domains. However, you can set up a gateway that bridges traditional DNS to the ONI network if you have technical expertise.</p>
+</div>
+
+<div class="card">
+    <h3>Q: Can I host dynamic websites with databases?</h3>
+    <p><strong>A:</strong> Yes! ONI serves standard HTML5, so you can use JavaScript to fetch data from APIs or databases. For dynamic backends, you'd need to run your own server alongside ONI and use JavaScript to connect to it.</p>
+</div>
+
+<div class="card">
+    <h3>Q: How is this different from a regular web host?</h3>
+    <p><strong>A:</strong> Regular web hosting relies on centralized servers. ONI is peer-to-peer — your content is hosted on your own machine or a server you control. There's no central company that can take down your site or charge you fees.</p>
+</div>
+
+<div class="card">
+    <h3>Q: Can I host multiple sites on one node?</h3>
+    <p><strong>A:</strong> Yes! You can host multiple .orb domains from a single ONI node. Just use <code>--host-domain</code> multiple times or register them through the ONI Manager.</p>
+</div>
+
+<div class="card">
+    <h3>Q: What happens if my computer goes offline?</h3>
+    <p><strong>A:</strong> Your hosted sites will be unavailable until you come back online. For always-on hosting, use a VPS or server with Docker deployment.</p>
+</div>
+
+<div class="card">
+    <h3>Q: Can I use HTTPS/SSL with ONI?</h3>
+    <p><strong>A:</strong> ONI uses its own security model with Ed25519 cryptographic signatures rather than traditional SSL/TLS. Content is cryptographically signed by the domain owner.</p>
+</div>
+
+<div class="card">
+    <h3>Q: How do I update my website content?</h3>
+    <p><strong>A:</strong> Simply update the files in your website directory and restart the ONI node hosting the domain: <code>oni node --host-domain mysite.orb /path/to/mysite</code></p>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <p>ONI DevKit v1.0  |  Orbital Network Infrastructure</p>
+    <p>© 2026 Technic_ Dev  |  ONI: The People's Internet</p>
+    <p style="margin-top:10px;">
+        <span class="badge">📖 Documentation</span>
+        <span class="badge">🐳 Docker</span>
+        <span class="badge">🔗 Domain Linking</span>
+        <span class="badge">🖥️ Self-Hosting</span>
+    </p>
+</div>
+
+</div>
+
+<script>
+// Smooth scrolling for sidebar links
+document.querySelectorAll('.sidebar a').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        // Update active state
+        document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+
+// Highlight current section on scroll
+window.addEventListener('scroll', () => {
+    const sections = document.querySelectorAll('h2[id]');
+    let current = '';
+    sections.forEach(section => {
+        const top = section.offsetTop - 100;
+        if (window.scrollY >= top) {
+            current = section.id;
+        }
+    });
+    document.querySelectorAll('.sidebar a').forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href') === '#' + current) {
+            a.classList.add('active');
+        }
+    });
+});
+</script>
+
+</body>
+</html>

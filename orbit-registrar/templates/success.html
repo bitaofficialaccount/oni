@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Domain Registered!{% endblock %}
+{% block content %}
+<section class="success-section">
+    <div class="success-icon">✅</div>
+    <h1>Domain Registered Successfully!</h1>
+    <div class="domain-showcase">
+        <span class="registered-domain">{{ domain }}</span>
+    </div>
+    
+    <div class="owner-key-box">
+        <h3>🔑 Your Owner Key</h3>
+        <div class="key-display">
+            <code>{{ owner_key }}</code>
+        </div>
+        <p class="warning">
+            ⚠️ <strong>IMPORTANT:</strong> Save this key! It is the ONLY way to prove 
+            ownership of your domain. If you lose it, you cannot manage your domain.
+        </p>
+    </div>
+    
+    <div class="next-steps">
+        <h2>📋 Next Steps</h2>
+        <ol>
+            <li><strong>Save your Owner Key</strong> — Copy it somewhere safe right now!</li>
+            <li><strong>Start an ONI Node</strong> — Run <code>python3 p2p/oni_node.py --host-domain {{ domain }} /path/to/your/site</code></li>
+            <li><strong>Create Your Website</strong> — Build your site with HTML5, CSS, and JavaScript</li>
+            <li><strong>Launch Orbit Browser</strong> — Open <code>orb://{{ domain }}</code> to see your site</li>
+        </ol>
+    </div>
+    
+    <div class="action-buttons">
+        <a href="/" class="btn btn-secondary">🏠 Back to Home</a>
+        <a href="/manage" class="btn btn-primary">🔧 Manage Domain</a>
+    </div>
+</section>
+{% endblock %}

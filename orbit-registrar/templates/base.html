@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Orbit Domain Registrar{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="/" class="nav-brand">🌐 Orbit Registrar</a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/register">Register</a>
+                <a href="/manage">Manage</a>
+                <a href="/list">Domains</a>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer class="footer">
+        <div class="container">
+            <p>Orbit Domain Registrar — Part of the Orbital Network Infrastructure (ONI)</p>
+            <p>© 2026 Technic_ Dev — Free .orb Domains for Everyone</p>
+        </div>
+    </footer>
+</body>
+</html>

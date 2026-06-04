@@ -1,0 +1,44 @@
+# ONI - Orbital Network Infrastructure
+# Git ignore rules
+
+# Environment
+.env
+.env.local
+*.env
+
+# Data directories
+data/
+data/*
+!data/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Docker
+.docker/
+
+# Install info
+.oni_install_info

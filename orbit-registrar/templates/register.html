@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Register a .orb Domain{% endblock %}
+{% block content %}
+<section class="form-section">
+    <h1>📝 Register Your Free .orb Domain</h1>
+    <p class="subtitle">Choose your domain name and TLD — it's completely free!</p>
+    
+    {% if error %}
+    <div class="alert alert-error">
+        ❌ {{ error }}
+    </div>
+    {% endif %}
+    
+    <form method="POST" action="/register" class="register-form">
+        <div class="form-group">
+            <label for="domain_name">Domain Name:</label>
+            <div class="domain-input">
+                <input type="text" id="domain_name" name="domain_name" 
+                       placeholder="mydomain" required 
+                       pattern="[a-z0-9]([a-z0-9-]*[a-z0-9])?"
+                       title="Letters, numbers, and hyphens only">
+                <select name="tld" id="tld" class="tld-select">
+                    {% for tld in orb_tlds %}
+                    <option value="{{ tld }}">.{{ tld }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <small>Example: mydomain.orb, myproject.orb.dev, mysite.orb.be</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="owner">Your Name/Nickname (optional):</label>
+            <input type="text" id="owner" name="owner" placeholder="Your name or alias">
+        </div>
+        
+        <button type="submit" class="btn btn-primary btn-large">🚀 Register Domain — Free!</button>
+    </form>
+    
+    <div class="info-box">
+        <h3>📋 Before You Register:</h3>
+        <ul>
+            <li>Domain names are <strong>FREE</strong> — no payment required</li>
+            <li>You will receive an <strong>Owner Key</strong> to manage your domain</li>
+            <li><strong>Save your Owner Key</strong> — it's the only way to prove ownership</li>
+            <li>You must run an ONI network node to host your website</li>
+            <li>Domains support HTML5, CSS3, JavaScript, and all web standards</li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

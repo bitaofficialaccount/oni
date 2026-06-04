@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # ===== ONI P2P Node =====
+  oni-node:
+    build: .
+    container_name: oni-node
+    ports:
+      - "6881:6881"
+    volumes:
+      - ./data:/app/data
+      - ./sites:/app/sites
+    environment:
+      - ONI_NODE_PORT=6881
+      - ONI_HOST=0.0.0.0
+    command: python3 p2p/oni_node.py --host 0.0.0.0 --port 6881
+    restart: unless-stopped
+    networks:
+      - oni-network
+
+  # ===== ONS Server =====
+  ons-server:
+    build: .
+    container_name: oni-ons
+    ports:
+      - "5353:5353"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - ONS_PORT=5353
+    command: python3 ons/ons_server.py --port 5353
+    restart: unless-stopped
+    networks:
+      - oni-network
+
+  # ===== Domain Registrar =====
+  oni-registrar:
+    build: .
+    container_name: oni-registrar
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - REGISTRAR_PORT=8080
+    command: python3 orbit-registrar/registrar.py --port 8080
+    restart: unless-stopped
+    networks:
+      - oni-network
+    depends_on:
+      - ons-server
+
+  # ===== Orbit Browser (Web/CLI Mode) =====
+  orbit-browser:
+    build: .
+    container_name: orbit-browser
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - BROWSER_PORT=9090
+    command: python3 apps/orbit_browser_app.py --url orb://helloworld.orb
+    restart: unless-stopped
+    networks:
+      - oni-network
+    depends_on:
+      - oni-node
+      - ons-server
+
+networks:
+  oni-network:
+    driver: bridge

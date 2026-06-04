@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Manage Your .orb Domain{% endblock %}
+{% block content %}
+<section class="form-section">
+    <h1>🔧 Manage Your Domain</h1>
+    <p class="subtitle">Enter your domain name and owner key to manage your registration.</p>
+    
+    {% if message %}
+    <div class="alert alert-info">ℹ️ {{ message }}</div>
+    {% endif %}
+    
+    <form method="POST" action="/manage" class="manage-form">
+        <div class="form-group">
+            <label for="domain">Domain Name:</label>
+            <input type="text" id="domain" name="domain" placeholder="yourdomain.orb" required>
+        </div>
+        <div class="form-group">
+            <label for="owner_key">Owner Key:</label>
+            <input type="text" id="owner_key" name="owner_key" placeholder="Your owner key" required>
+        </div>
+        <button type="submit" class="btn btn-primary">🔓 Access Domain</button>
+    </form>
+    
+    {% if domain %}
+    <div class="domain-details">
+        <h2>📄 Domain Details</h2>
+        <div class="detail-card">
+            <div class="detail-row">
+                <span class="detail-label">Domain</span>
+                <span class="detail-value">{{ domain.domain }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Owner</span>
+                <span class="detail-value">{{ domain.owner }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">TLD</span>
+                <span class="detail-value">.{{ domain.tld }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Registered</span>
+                <span class="detail-value">{{ domain.registered }}</span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Status</span>
+                <span class="detail-value"><span class="status {{ domain.status }}">{{ domain.status }}</span></span>
+            </div>
+            <div class="detail-row">
+                <span class="detail-label">Records</span>
+                <span class="detail-value">
+                    <code>{{ domain.records }}</code>
+                </span>
+            </div>
+        </div>
+        
+        <p class="tip">💡 To host your domain, run: <code>python3 p2p/oni_node.py --host-domain {{ domain.domain }} /path/to/your/website</code></p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
