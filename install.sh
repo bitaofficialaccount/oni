@@ -128,8 +128,14 @@ echo -e "${BLUE}[4/6]${NC} Installing dependencies..."
 DEPS=("websockets" "flask" "requests" "aiohttp")
 for dep in "${DEPS[@]}"; do
     echo -e "  Installing ${YELLOW}${dep}${NC}..."
-    $PYTHON -m pip install "$dep" -q 2>/dev/null || $PYTHON -m pip install "$dep" --user -q 2>/dev/null || true
+    $PYTHON -m pip install "$dep" -q 2>/dev/null || \
+    $PYTHON -m pip install "$dep" --user -q 2>/dev/null || \
+    $PYTHON -m pip install "$dep" --break-system-packages -q 2>/dev/null || \
+    echo -e "  ${YELLOW}⚠ Could not install $dep, try: sudo pip3 install $dep${NC}"
 done
+
+# Install supabase client if available
+$PYTHON -m pip install "supabase-py>=2.0" -q 2>/dev/null || $PYTHON -m pip install "supabase-py>=2.0" --user -q 2>/dev/null || true
 
 # Install tkinter if missing
 if $PYTHON -c "import tkinter" 2>/dev/null; then

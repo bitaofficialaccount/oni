@@ -14,7 +14,7 @@ logger = logging.getLogger("ONI.Resolver")
 class ONSResolver:
     """Resolves .orb domains to their hosting information."""
     
-    def __init__(self, registry):
+    def __init__(self, registry=None):
         self.registry = registry
         self.cache = {}
         self.cache_ttl = 300  # 5 minutes
@@ -31,14 +31,17 @@ class ONSResolver:
                 if time.time() - timestamp < self.cache_ttl:
                     return entry
         
-        # Resolve from registry
-        records = self.registry.resolve_domain(domain)
+        if self.registry:
+            # Resolve from registry
+            records = self.registry.resolve_domain(domain)
+            
+            # Cache the result
+            with self.lock:
+                self.cache[domain] = (records, time.time())
+            
+            return records
         
-        # Cache the result
-        with self.lock:
-            self.cache[domain] = (records, time.time())
-        
-        return records
+        return None
     
     def batch_resolve(self, domains):
         """Resolve multiple domains at once."""
@@ -51,3 +54,9 @@ class ONSResolver:
                 self.cache.pop(domain, None)
             else:
                 self.cache.clear()
+
+
+class DNSResolver(ONSResolver):
+    """Alias for ONSResolver - resolves .orb domains to their hosting information.
+    This class exists for backward compatibility with code that imports DNSResolver."""
+    pass
