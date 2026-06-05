@@ -1,13 +1,12 @@
 #!/bin/bash
 set -e
 
-# Install ONI to /usr/share/oni
-if [ ! -d /usr/share/oni ]; then
-    mkdir -p /usr/share/oni
-fi
-
-# Create the oni CLI command
-cat > /usr/bin/oni << 'CLI'
+case "$1" in
+    configure)
+        ONI_DIR="/usr/share/oni"
+        
+        # Create the oni CLI command
+        cat > /usr/bin/oni << 'CLI'
 #!/bin/bash
 ONI_DIR="/usr/share/oni"
 PYTHON=$(command -v python3 || command -v python)
@@ -22,17 +21,60 @@ case "$1" in
     help|--help|-h)
         echo "ONI - Orbital Network Infrastructure"
         echo "Usage: oni <command>"
-        echo "Commands: start|node|ons|registrar|browser|manager|devkit"
+        echo "Commands:"
+        echo "  start       Start all ONI components"
+        echo "  node        Start an ONI P2P node"
+        echo "  ons         Start the ONS server"
+        echo "  registrar   Start the domain registrar"
+        echo "  browser     Launch the Orbit Browser"
+        echo "  manager     Launch the ONI Manager"
+        echo "  devkit      Open the ONI Developer Kit"
         ;;
     *)           echo "Usage: oni <command> (start|node|ons|registrar|browser|manager|devkit)" ;;
 esac
 CLI
-chmod +x /usr/bin/oni
-
-# Update desktop database
-update-desktop-database /usr/share/applications 2>/dev/null || true
-
-echo "✅ ONI installed successfully!"
-echo "   Run: oni browser (to launch Orbit Browser)"
-echo "   Run: oni manager (to launch ONI Manager)"
-echo "   Find apps in your application menu"
+        chmod +x /usr/bin/oni
+        
+        # Create user data directory
+        for user_home in /home/*; do
+            if [ -d "$user_home" ]; then
+                mkdir -p "$user_home/ONI/data"/{cache,domains,peers,logs}
+                chown -R $(stat -c '%u:%g' "$user_home") "$user_home/ONI" 2>/dev/null || true
+            fi
+        done
+        
+        # Update desktop database
+        update-desktop-database /usr/share/applications 2>/dev/null || true
+        
+        echo ""
+        echo "  ╔══════════════════════════════════════════════╗"
+        echo "  ║       ✅ ONI Installed Successfully!        ║"
+        echo "  ╚══════════════════════════════════════════════╝"
+        echo ""
+        echo "  📱 Launch from your app menu:"
+        echo "     • Orbit Browser — Browse .orb websites"
+        echo "     • ONI Manager  — Manage your network"
+        echo ""
+        echo "  🖥️  Or use the command line:"
+        echo "     oni browser    → Launch Orbit Browser"
+        echo "     oni manager    → Launch ONI Manager"
+        echo "     oni start      → Start all services"
+        echo ""
+        echo "  📖 Developer Kit available in: oni-dev package"
+        echo "     sudo apt install oni-dev"
+        echo "     oni devkit     → Open documentation"
+        echo "     oni registrar  → Start domain registrar"
+        echo ""
+        echo "  🌐 ONI: The People's Internet"
+        echo ""
+        ;;
+    
+    abort-upgrade|abort-remove|abort-deconfigure)
+        exit 0
+        ;;
+    
+    *)
+        echo "postinst called with unknown argument '$1'" >&2
+        exit 1
+        ;;
+esac

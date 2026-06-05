@@ -1,0 +1,16 @@
+# ONI Dev Kit additional files
+usr/share/oni/ONI_DevKit/index.html
+usr/share/oni/Dockerfile
+usr/share/oni/docker-compose.yml
+usr/share/oni/ons/ons_server.py
+usr/share/oni/orbit-registrar/registrar.py
+usr/share/oni/orbit-registrar/templates/base.html
+usr/share/oni/orbit-registrar/templates/index.html
+usr/share/oni/orbit-registrar/templates/register.html
+usr/share/oni/orbit-registrar/templates/success.html
+usr/share/oni/orbit-registrar/templates/manage.html
+usr/share/oni/orbit-registrar/templates/list.html
+usr/share/oni/orbit-registrar/static/style.css
+usr/share/oni/examples/helloworld.orb/index.html
+usr/share/oni/examples/myblog.ord/index.html
+usr/share/oni/install.sh

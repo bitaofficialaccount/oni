@@ -1,4 +1,17 @@
-usr/share/oni
-usr/bin/oni
-usr/share/applications/oni-manager.desktop
+# ONI core package files
+usr/share/oni/apps/orbit_browser_app.py
+usr/share/oni/apps/oni_manager.py
+usr/share/oni/p2p/oni_node.py
+usr/share/oni/p2p/peer.py
+usr/share/oni/p2p/protocol.py
+usr/share/oni/ons/resolver.py
+usr/share/oni/ons/registry.py
+usr/share/oni/start_oni.py
+usr/share/oni/supabase_client.py
+usr/share/oni/supabase_schema.sql
+usr/share/oni/.env.example
+usr/share/oni/LICENSE
+usr/share/oni/README.md
 usr/share/applications/orbit-browser.desktop
+usr/share/applications/oni-manager.desktop
+usr/share/man/man1/oni.1
