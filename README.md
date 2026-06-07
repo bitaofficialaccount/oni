@@ -2,6 +2,8 @@
 
 **The Future of Decentralized Web — The People's Internet**
 
+(Linux .deb and .RPM packages only! Windows and Macos coming soon!)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![One-Click Install](https://img.shields.io/badge/install-one--click-brightgreen)](install.sh)
